@@ -213,16 +213,228 @@
   </div>
 </div>
 
-      <!-- Edit Foto -->
- <div class="card">
+ <!-- ===================== -->
+<!-- ======  CARD  ======= -->
+<!-- ===================== -->
+
+<div class="card">
   <div style="display: flex; align-items: center;">
-    <img src="https://files.catbox.moe/5edwcj.jpeg" alt="Edit Foto" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
+    <img src="https://files.catbox.moe/a1ymqx.jpeg" alt="SEWA BOT" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px; margin-right: 10px;">
     <div>
-      <div class="title">Edit Foto</div>
-      <div class="desc"><span class="subtitle">Rp5.000</span></div>
+      <div class="title">SEWA BOT</div>
+      <div class="desc">Mulai dari <span class="subtitle">Rp4.000</span></div>
     </div>
   </div>
-  <a class="btn btn-wa" href="https://wa.me/6282337375424?text=Halo%20saya%20ingin%20beli%20Edit%20Foto" target="_blank">Beli Sekarang</a>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:10px;">
+    <button class="btn btn-ghost" id="openSewaBotBtn">Lihat Varian</button>
+    <a class="btn btn-wa" href="https://wa.me/6282337375424?text=Saya%20ingin%20tanya%20tentang%20Sewa%20Bot" target="_blank">Chat via WhatsApp</a>
+  </div>
+</div>
+
+
+<!-- ===================== -->
+<!-- ===== MODAL   ======= -->
+<!-- ===================== -->
+
+<div id="modalSewaBotBackdrop" class="modal-backdrop" aria-hidden="true">
+  <div class="modal">
+    <h3>Pilih Varian — SEWA BOT</h3>
+    <div class="small">Silakan pilih varian sesuai kebutuhan Anda.</div>
+
+    <div class="variants" id="sewaBotVariantsList"></div>
+
+    <div class="modal-footer">
+      <div class="note" id="sewaBotSelectedNote">Belum ada varian dipilih</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost" id="closeSewaBotModalBtn">Tutup</button>
+        <a id="sewaBotWaCheckoutBtn" class="btn btn-wa" href="#" target="_blank">Chat via WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== -->
+<!-- ======  CSS   ======= -->
+<!-- ===================== -->
+
+<style>
+  .card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 0 6px #0002;
+    margin-bottom: 20px;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .desc { font-size: 14px; opacity: .8; }
+  .subtitle { font-weight: bold; }
+
+  .btn {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .btn-ghost {
+    background: #eee;
+  }
+  .btn-wa {
+    background: #25d366;
+    color: #fff;
+  }
+
+  /* MODAL */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(4px);
+    background: #0004;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .modal-backdrop.show {
+    display: flex;
+  }
+  .modal {
+    background: #fff;
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    border-radius: 15px;
+  }
+
+  .variants {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .variant {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: left;
+    cursor: pointer;
+    background: #f9f9f9;
+  }
+  .variant.selected {
+    border: 2px solid #25d366;
+    background: #eaffef;
+  }
+  .variant .name { font-size: 14px; font-weight: bold; }
+  .variant .price { font-size: 13px; opacity: .8; }
+
+  .modal-footer {
+    margin-top: 15px;
+  }
+  .note {
+    font-size: 14px;
+    padding: 8px;
+    background: #f3f3f3;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+</style>
+
+
+<!-- ===================== -->
+<!-- ====== SCRIPT ======= -->
+<!-- ===================== -->
+
+<script>
+  const sewaBotPhone = "6282337375424";
+
+  const sewaBotVariants = [
+    { name: "SW Grup – 15 Hari", price: 4000 },
+    { name: "SW Grup – 30 Hari (Promo 3k)", price: 3000 },
+    { name: "SW Grup – 60 Hari", price: 10000 },
+    { name: "SW Grup – 90 Hari", price: 20000 },
+
+    { name: "SW Grup Premium – 15 Hari", price: 12000 },
+    { name: "SW Grup Premium – 30 Hari", price: 23000 },
+    { name: "SW Grup Premium – 60 Hari", price: 44000 },
+    { name: "SW Grup Premium – 90 Hari", price: 66000 },
+
+    { name: "SW User Premium – 15 Hari", price: 7000 },
+    { name: "SW User Premium – 30 Hari", price: 10000 },
+    { name: "SW User Premium – 60 Hari", price: 18000 },
+    { name: "SW User Premium – 90 Hari", price: 25000 }
+  ];
+
+  function formatRp(n) {
+    return "Rp" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  }
+
+  // DOM
+  const sewaBotBackdrop = document.getElementById("modalSewaBotBackdrop");
+  const sewaBotListEl = document.getElementById("sewaBotVariantsList");
+  const sewaBotNote = document.getElementById("sewaBotSelectedNote");
+  const sewaBotWaBtn = document.getElementById("sewaBotWaCheckoutBtn");
+  const openSewaBotBtn = document.getElementById("openSewaBotBtn");
+  const closeSewaBotModalBtn = document.getElementById("closeSewaBotModalBtn");
+
+  let sewaBotSelectedIndex = 0;
+
+  sewaBotVariants.forEach((v, i) => {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "variant" + (i === sewaBotSelectedIndex ? " selected" : "");
+    el.setAttribute("data-index", i);
+    el.innerHTML = `
+      <div class="name">${v.name}</div>
+      <div class="price">${formatRp(v.price)}</div>
+    `;
+    el.addEventListener("click", () => selectSewaBotVariant(i));
+    sewaBotListEl.appendChild(el);
+  });
+
+  function openSewaBotModal() {
+    sewaBotBackdrop.classList.add("show");
+  }
+  function closeSewaBotModal() {
+    sewaBotBackdrop.classList.remove("show");
+  }
+
+  openSewaBotBtn.addEventListener("click", openSewaBotModal);
+  closeSewaBotModalBtn.addEventListener("click", closeSewaBotModal);
+
+  function selectSewaBotVariant(index) {
+    sewaBotSelectedIndex = index;
+    updateSewaBotUI();
+  }
+
+  function updateSewaBotUI() {
+    document.querySelectorAll("#sewaBotVariantsList .variant").forEach((el) => {
+      el.classList.toggle(
+        "selected",
+        Number(el.getAttribute("data-index")) === sewaBotSelectedIndex
+      );
+    });
+
+    const sel = sewaBotVariants[sewaBotSelectedIndex];
+
+    sewaBotNote.textContent = `${sel.name} — ${formatRp(sel.price)}`;
+
+    const msg = `Halo, saya ingin sewa bot varian ${sel.name} (${formatRp(sel.price)})`;
+
+    sewaBotWaBtn.href =
+      `https://wa.me/${sewaBotPhone}?text=` + encodeURIComponent(msg);
+  }
+
+  updateSewaBotUI();
+</script>
   </div>
 </div>
 
